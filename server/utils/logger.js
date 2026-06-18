@@ -1,22 +1,21 @@
-const formatMessage = (level, message, meta) => {
-  const ts = new Date().toISOString();
-  let line = `[${ts}] [${level}] ${message}`;
-  if (meta && Object.keys(meta).length > 0) {
-    line += ` ${JSON.stringify(meta)}`;
-  }
-  return line;
-};
+const winston = require('winston');
+const config = require('../config');
 
-const logger = {
-  info(message, meta) {
-    console.log(formatMessage('INFO', message, meta));
-  },
-  warn(message, meta) {
-    console.warn(formatMessage('WARN', message, meta));
-  },
-  error(message, meta) {
-    console.error(formatMessage('ERROR', message, meta));
-  },
-};
+const logFormat = winston.format.combine(
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.errors({ stack: true }),
+  config.nodeEnv === 'production'
+    ? winston.format.json()
+    : winston.format.printf(({ timestamp, level, message, ...metadata }) => {
+        let metaStr = Object.keys(metadata).length ? ` ${JSON.stringify(metadata)}` : '';
+        return `[${timestamp}] [${level.toUpperCase()}]: ${message}${metaStr}`;
+      })
+);
+
+const logger = winston.createLogger({
+  level: config.nodeEnv === 'production' ? 'info' : 'debug',
+  format: logFormat,
+  transports: [new winston.transports.Console()],
+});
 
 module.exports = logger;
