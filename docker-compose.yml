@@ -1,0 +1,70 @@
+# ── CampusConnect Docker Compose (TODO 12 & 13) ────────────
+# Orchestrates Frontend, Backend, and MongoDB containers
+
+services:
+  # ── MongoDB Database (TODO 12) ──────────────────────────
+  mongodb:
+    image: mongo:7.0
+    container_name: campusconnect-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-admin_password}
+      MONGO_INITDB_DATABASE: campusconnect
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - campusconnect-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # ── Backend API Server (TODO 10) ────────────────────────
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: campusconnect-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      MONGO_URI: mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-admin_password}@mongodb:27017/campusconnect?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:-campusconnect_docker_secret_2025}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - campusconnect-network
+
+  # ── Frontend React App (TODO 11) ────────────────────────
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: campusconnect-web
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - campusconnect-network
+
+# ── Persistent Volumes ──────────────────────────────────────
+volumes:
+  mongo_data:
+    driver: local
+
+# ── Network ─────────────────────────────────────────────────
+networks:
+  campusconnect-network:
+    driver: bridge

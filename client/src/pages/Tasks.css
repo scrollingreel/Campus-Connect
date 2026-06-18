@@ -1,0 +1,291 @@
+/* Tasks Page — CampusConnect */
+
+.tasks-page {
+  min-height: 100vh;
+  padding: 2.5rem 0 4rem;
+  background: var(--bg-primary);
+}
+
+/* ── Page Header ── */
+.tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tasks-header h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.tasks-header p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin: 4px 0 0;
+}
+
+/* ── Summary Stats ── */
+.tasks-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.task-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.2s;
+}
+
+.task-stat-card:hover { transform: translateY(-3px); }
+
+.task-stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.task-stat-label {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* ── Layout Grid ── */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.8rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .tasks-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Create Task Form Panel ── */
+.task-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.8rem;
+  position: sticky;
+  top: 90px;
+}
+
+.task-form-card h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.1rem;
+}
+
+.form-group label {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: .04em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.form-group select option {
+  background: var(--bg-card);
+}
+
+.form-error-msg {
+  font-size: 0.78rem;
+  color: var(--danger, #ff6384);
+  margin-top: 2px;
+}
+
+/* ── Task List ── */
+.task-list-section h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.task-filter-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.task-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+.task-filter-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.2rem 1.4rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeInUp 0.3s ease both;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+}
+
+@keyframes fadeInUp {
+  from { opacity:0; transform: translateY(12px); }
+  to   { opacity:1; transform: translateY(0);    }
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.task-card-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  flex: 1;
+}
+
+.task-card-title.completed {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.task-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-card-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.task-card-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Status select inside card */
+.status-select {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.btn-icon:hover { background: var(--bg-secondary); }
+.btn-icon.danger:hover { border-color: var(--danger, #ff6384); color: var(--danger, #ff6384); }
+
+/* ── Empty / Loading States ── */
+.tasks-loading,
+.tasks-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+}
+
+.tasks-empty .empty-icon {
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+}
