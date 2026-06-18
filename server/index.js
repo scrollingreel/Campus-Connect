@@ -12,11 +12,9 @@ const announcementRoutes = require('./routes/announcements');
 
 const app = express();
 
-// CORS — whitelist deployed frontend in production
+// CORS — dynamically reflect the request origin to allow frontend communication
 const corsOptions = {
-  origin: config.nodeEnv === 'production'
-    ? [config.clientURL]
-    : '*',
+  origin: true,
   credentials: true,
 };
 app.use(cors(corsOptions));
